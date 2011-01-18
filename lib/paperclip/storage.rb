@@ -196,7 +196,10 @@ module Paperclip
       # style, in the format most representative of the current storage.
       def to_file style = default_style
         return @queued_for_write[style] if @queued_for_write[style]
-        file = Tempfile.new(path(style))
+
+        # "1.9.2" => 19
+        ruby_version = RUBY_VERSION.split('.')[0,2].join.to_i
+        file = ruby_version < 19 ? Tempfile.new(path(style)) : Tempfile.new(path(style), :encoding => 'binary')
         file.write(AWS::S3::S3Object.value(path(style), bucket_name))
         file.rewind
         return file
