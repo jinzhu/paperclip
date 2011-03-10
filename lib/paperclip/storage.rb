@@ -153,13 +153,19 @@ module Paperclip
           ))
         end
         Paperclip.interpolates(:s3_alias_url) do |attachment, style|
-          "#{attachment.s3_protocol}://#{attachment.s3_host_alias}/#{attachment.path(style).gsub(%r{^/}, "")}"
+          path = "/#{attachment.path(style)}"
+          path = path.gsub(%r{^/}, "") if path
+          "#{attachment.s3_protocol}://#{attachment.s3_host_alias}#{path}"
         end
         Paperclip.interpolates(:s3_path_url) do |attachment, style|
-          "#{attachment.s3_protocol}://s3.amazonaws.com/#{attachment.bucket_name}/#{attachment.path(style).gsub(%r{^/}, "")}"
+          path = "/#{attachment.path(style)}"
+          path = path.gsub(%r{^/}, "") if path
+          "#{attachment.s3_protocol}://s3.amazonaws.com/#{attachment.bucket_name}#{path}"
         end
         Paperclip.interpolates(:s3_domain_url) do |attachment, style|
-          "#{attachment.s3_protocol}://#{attachment.bucket_name}.s3.amazonaws.com/#{attachment.path(style).gsub(%r{^/}, "")}"
+          path = "/#{attachment.path(style)}"
+          path = path.gsub(%r{^/}, "") if path
+          "#{attachment.s3_protocol}://#{attachment.bucket_name}.s3.amazonaws.com#{path}"
         end
       end
 
